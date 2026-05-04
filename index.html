@@ -1,0 +1,1144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>IEEE IAS ENIG Student Branch Chapter</title>
+<script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+<!-- ============================================================
+     FONTS: Barlow Condensed (industrial display) + IBM Plex Sans (body)
+     Feel free to swap for other Google Fonts if desired.
+============================================================ -->
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;700;800&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+
+<style>
+/* ============================================================
+   RESET & CSS VARIABLES
+   — Green industrial palette replacing the original blue/gold
+============================================================ */
+*{margin:0;padding:0;box-sizing:border-box}
+
+:root{
+  /* Primary greens */
+  --green:       #1a7a3c;   /* main brand green          */
+  --green-dark:  #0d3d1e;   /* deep forest / backgrounds */
+  --green-mid:   #2a9d54;   /* mid-tone accents          */
+  --green-light: #3ec76e;   /* bright highlight          */
+
+  /* Accent */
+  --lime:        #b5e550;   /* sharp industrial lime     */
+  --lime-dim:    #8ab83a;   /* muted lime for borders    */
+
+  /* Neutrals */
+  --white:       #ffffff;
+  --off-white:   #f0f7f2;   /* very pale green-tinted bg */
+  --text:        #0d1a10;   /* near-black with green tint*/
+  --muted:       #4a6352;   /* muted green-grey          */
+
+  /* Typography */
+  --font-display: 'Barlow Condensed', sans-serif;
+  --font-body:    'IBM Plex Sans', sans-serif;
+}
+
+html{scroll-behavior:smooth}
+body{font-family:var(--font-body);background:var(--white);color:var(--text);overflow-x:hidden}
+
+/* Scrollbar — thin, industrial feel */
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:var(--green-dark)}
+::-webkit-scrollbar-thumb{background:var(--lime);border-radius:0}
+
+/* ============================================================
+   NAV
+============================================================ */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:999;
+  height:68px;display:flex;align-items:center;
+  justify-content:space-between;padding:0 4vw;
+  transition:background 0.3s,box-shadow 0.3s;
+  border-bottom:1px solid transparent;
+}
+nav.scrolled{
+  background:rgba(13,29,16,0.97);
+  backdrop-filter:blur(14px);
+  box-shadow:0 2px 28px rgba(0,0,0,0.4);
+  border-bottom-color:rgba(181,229,80,0.15);
+}
+nav.top{background:transparent}
+
+/* --- Logo area ---
+   Contains two image slots + text fallback.
+   Replace the <img> src attributes with your real logo files. */
+.logo{display:flex;align-items:center;gap:12px;text-decoration:none}
+
+/* TODO: replace src with actual IEEE IAS logo file path */
+.logo-img-ieee{
+  height:48px;width:auto;
+  display:flex;align-items:center;justify-content:center;
+}
+.logo-img-ieee img{height:48px;width:auto;display:block}
+.logo-img-ieee .placeholder-label{
+  color:var(--lime);font-size:9px;font-weight:600;
+  letter-spacing:1.5px;padding:0 8px;text-align:center;line-height:1.3;
+  font-family:var(--font-display);
+}
+
+/* TODO: replace src with actual ENIG / university logo file path */
+.logo-img-enig{
+  height:48px;width:auto;
+  display:flex;align-items:center;justify-content:center;
+}
+.logo-img-enig img{height:48px;width:auto;display:block}
+.logo-img-enig .placeholder-label{
+  color:var(--lime);font-size:9px;font-weight:600;
+  letter-spacing:1.5px;padding:0 8px;text-align:center;line-height:1.3;
+  font-family:var(--font-display);
+}
+
+.logo-divider{width:1px;height:28px;background:rgba(255,255,255,0.2)}
+.logo-text{
+  color:var(--white);
+  font-family:var(--font-display);
+  font-weight:700;font-size:16px;letter-spacing:0.5px;
+}
+
+.nav-links{display:flex;gap:2.2rem;list-style:none}
+.nav-links a{
+  color:rgba(255,255,255,0.72);text-decoration:none;
+  font-size:14px;font-weight:500;
+  transition:color 0.2s;letter-spacing:0.5px;
+  text-transform:uppercase;
+}
+.nav-links a:hover{color:var(--lime)}
+
+/* ============================================================
+   HERO
+============================================================ */
+.hero{
+  min-height:100vh;
+  background:var(--green-dark);
+  position:relative;display:flex;align-items:center;
+  justify-content:center;overflow:hidden;padding:80px 4vw 60px;
+}
+
+/* Tight industrial grid pattern */
+.hero-bg-circuit{
+  position:absolute;inset:0;opacity:0.07;
+  background-image:
+    linear-gradient(rgba(181,229,80,0.8) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(181,229,80,0.8) 1px,transparent 1px);
+  background-size:48px 48px;
+}
+
+/* Subtle radial glow centered */
+.hero-glow{
+  position:absolute;width:720px;height:720px;border-radius:50%;
+  background:radial-gradient(circle,rgba(26,122,60,0.4) 0%,transparent 70%);
+  top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;
+}
+
+.hero-content{position:relative;z-index:2;text-align:center;max-width:840px}
+
+.hero-eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  border:1px solid rgba(181,229,80,0.45);
+  color:var(--lime);font-size:11px;font-weight:600;
+  letter-spacing:3px;text-transform:uppercase;
+  padding:7px 18px;border-radius:2px;margin-bottom:1.8rem;
+  animation:fadeUp 0.7s ease both;
+}
+.hero-eyebrow::before{
+  content:'';width:6px;height:6px;border-radius:50%;
+  background:var(--lime);display:block;animation:pulse 2s infinite;
+}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.4;transform:scale(1.5)}}
+
+.hero h1{
+  font-family:var(--font-display);font-weight:800;
+  font-size:clamp(2.8rem,7vw,5.5rem);
+  color:var(--white);line-height:1.0;
+  margin-bottom:0.6rem;
+  animation:fadeUp 0.8s 0.15s ease both;
+  letter-spacing:1px;text-transform:uppercase;
+}
+.hero h1 em{color:var(--lime);font-style:normal}
+
+.hero-tagline{
+  font-size:clamp(0.95rem,1.8vw,1.12rem);
+  color:rgba(255,255,255,0.62);line-height:1.8;
+  max-width:560px;margin:0 auto 2.6rem;
+  animation:fadeUp 0.8s 0.3s ease both;
+}
+
+.hero-stats{
+  display:flex;justify-content:center;
+  gap:clamp(1.5rem,5vw,5rem);flex-wrap:wrap;
+  margin-bottom:2.8rem;animation:fadeUp 0.8s 0.45s ease both;
+}
+.hero-stat{text-align:center}
+.stat-num{
+  font-family:var(--font-display);
+  font-size:clamp(2rem,5vw,3.4rem);
+  font-weight:800;color:var(--lime);line-height:1;
+  letter-spacing:1px;
+}
+.stat-divider{width:1px;height:55px;background:rgba(255,255,255,0.15);align-self:center}
+.stat-label{font-size:12px;color:rgba(255,255,255,0.45);margin-top:6px;letter-spacing:1px;text-transform:uppercase}
+
+.hero-cta{
+  display:flex;gap:1rem;justify-content:center;
+  flex-wrap:wrap;animation:fadeUp 0.8s 0.6s ease both;
+}
+.btn-primary{
+  background:var(--lime);color:var(--green-dark);
+  font-family:var(--font-display);font-weight:700;
+  font-size:15px;letter-spacing:1px;text-transform:uppercase;
+  padding:13px 34px;border-radius:2px;border:none;
+  cursor:pointer;transition:transform 0.2s,box-shadow 0.2s;
+  text-decoration:none;display:inline-block;
+}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(181,229,80,0.35)}
+.btn-outline{
+  background:transparent;color:var(--white);
+  font-family:var(--font-display);font-weight:600;
+  font-size:15px;letter-spacing:1px;text-transform:uppercase;
+  padding:12px 34px;border-radius:2px;
+  border:1.5px solid rgba(255,255,255,0.3);
+  cursor:pointer;transition:all 0.2s;
+  text-decoration:none;display:inline-block;
+}
+.btn-outline:hover{border-color:var(--lime);color:var(--lime)}
+
+.hero-scroll{
+  position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+  animation:fadeUp 1s 0.9s ease both;cursor:pointer;
+}
+.hero-scroll span{color:rgba(255,255,255,0.35);font-size:10px;letter-spacing:3px;text-transform:uppercase}
+.scroll-line{
+  width:1px;height:40px;
+  background:linear-gradient(to bottom,rgba(181,229,80,0.8),transparent);
+  animation:scrollAnim 1.8s ease-in-out infinite;
+}
+@keyframes scrollAnim{
+  0%{transform:scaleY(0);transform-origin:top}
+  50%{transform:scaleY(1);transform-origin:top}
+  51%{transform:scaleY(1);transform-origin:bottom}
+  100%{transform:scaleY(0);transform-origin:bottom}
+}
+@keyframes fadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
+
+/* ============================================================
+   SHARED SECTION STYLES
+============================================================ */
+section{padding:100px 4vw}
+
+.section-label{
+  display:inline-block;font-size:10px;font-weight:600;
+  letter-spacing:3.5px;text-transform:uppercase;
+  color:var(--lime);margin-bottom:0.9rem;
+  border-left:3px solid var(--lime);padding-left:10px;
+  font-family:var(--font-display);
+}
+.section-title{
+  font-family:var(--font-display);font-weight:800;
+  font-size:clamp(2rem,4vw,3rem);color:var(--text);
+  line-height:1.1;margin-bottom:1rem;
+  text-transform:uppercase;letter-spacing:0.5px;
+}
+.section-title.light{color:var(--white)}
+.section-sub{font-size:1rem;color:var(--muted);line-height:1.75;max-width:560px}
+.section-sub.light{color:rgba(255,255,255,0.6)}
+
+/* ============================================================
+   ABOUT
+============================================================ */
+.about{background:var(--white)}
+.about-grid{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:5rem;align-items:center;max-width:1200px;margin:0 auto;
+}
+.about-image-block{position:relative}
+.about-card{
+  background:var(--green-dark);border-radius:4px;
+  padding:2.5rem;color:var(--white);
+  position:relative;overflow:hidden;
+  border-left:4px solid var(--lime);
+}
+.about-card::after{
+  content:'IAS';position:absolute;right:-10px;bottom:-30px;
+  font-family:var(--font-display);font-size:9rem;font-weight:800;
+  color:rgba(181,229,80,0.06);line-height:1;
+  pointer-events:none;user-select:none;
+}
+.about-card-tag{
+  background:var(--lime);color:var(--green-dark);
+  font-family:var(--font-display);
+  font-size:11px;font-weight:700;letter-spacing:2px;
+  padding:4px 10px;border-radius:2px;
+  display:inline-block;margin-bottom:1.2rem;text-transform:uppercase;
+}
+.about-card h3{
+  font-family:var(--font-display);font-size:1.6rem;
+  font-weight:800;margin-bottom:0.8rem;
+  text-transform:uppercase;letter-spacing:0.5px;
+}
+.about-card p{font-size:0.92rem;color:rgba(255,255,255,0.65);line-height:1.8}
+.about-features{margin-top:1.5rem;display:flex;flex-direction:column;gap:0.7rem}
+.about-feat{display:flex;align-items:center;gap:10px;font-size:14px;color:rgba(255,255,255,0.8)}
+.feat-dot{width:7px;height:7px;border-radius:0;background:var(--lime);flex-shrink:0;transform:rotate(45deg)}
+
+.about-text h2{
+  font-family:var(--font-display);font-weight:800;
+  font-size:clamp(1.8rem,3.5vw,2.6rem);
+  line-height:1.1;margin-bottom:1.2rem;
+  text-transform:uppercase;
+}
+.about-text p{color:var(--muted);line-height:1.85;font-size:1rem;margin-bottom:1rem}
+.pillars{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1.5rem}
+.pillar{
+  background:var(--off-white);border-radius:2px;
+  padding:1rem 1.2rem;border-left:3px solid var(--green);
+}
+.pillar h4{
+  font-family:var(--font-display);font-size:14px;font-weight:700;
+  color:var(--green-dark);margin-bottom:4px;
+  text-transform:uppercase;letter-spacing:0.5px;
+}
+.pillar p{font-size:13px;color:var(--muted)}
+
+/* ============================================================
+   EVENTS
+============================================================ */
+.events{background:var(--green-dark);position:relative;overflow:hidden}
+.events::before{
+  content:'';position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(181,229,80,0.04) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(181,229,80,0.04) 1px,transparent 1px);
+  background-size:48px 48px;
+}
+.events-inner{max-width:1200px;margin:0 auto;position:relative;z-index:1}
+.events-header{
+  display:flex;justify-content:space-between;
+  align-items:flex-end;margin-bottom:3rem;flex-wrap:wrap;gap:1rem;
+}
+.events-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.5rem}
+
+.event-card{
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(255,255,255,0.08);
+  border-radius:4px;overflow:hidden;
+  transition:transform 0.3s,border-color 0.3s;cursor:default;
+}
+.event-card:hover{transform:translateY(-6px);border-color:rgba(181,229,80,0.4)}
+
+/* --- Event card image area ---
+   Replace the placeholder div with an <img> tag when you have event photos.
+   Example:
+     <img src="./images/events/ev-workshop.jpg"
+          alt="Power Electronics Workshop"
+          class="event-img" />
+   Then set .event-img { width:100%; height:160px; object-fit:cover; } */
+.event-card-top{
+  background:linear-gradient(135deg,var(--green-dark),var(--green));
+  padding:1.5rem;position:relative;overflow:hidden;
+  min-height:130px;display:flex;flex-direction:column;justify-content:flex-end;
+}
+.event-card-bg{
+  position:absolute;inset:0;opacity:0.12;
+  font-family:var(--font-display);font-size:6rem;font-weight:800;
+  color:var(--lime);display:flex;align-items:center;
+  justify-content:center;line-height:1;
+}
+
+/* Placeholder shown when no event image is provided */
+.event-img-placeholder{
+  width:100%;height:160px;
+  background:rgba(181,229,80,0.07);
+  border-bottom:1px dashed rgba(181,229,80,0.2);
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:600;letter-spacing:2px;
+  color:rgba(181,229,80,0.4);text-transform:uppercase;
+  font-family:var(--font-display);
+}
+
+.event-date{
+  background:var(--lime);color:var(--green-dark);
+  font-family:var(--font-display);font-weight:700;
+  font-size:11px;letter-spacing:1.5px;
+  padding:4px 10px;border-radius:2px;
+  display:inline-block;position:relative;z-index:1;
+  margin-bottom:0.5rem;text-transform:uppercase;
+}
+.event-title{
+  font-family:var(--font-display);font-weight:700;
+  font-size:1.05rem;color:var(--white);
+  position:relative;z-index:1;letter-spacing:0.3px;
+}
+.event-body{padding:1.2rem 1.5rem}
+.event-body p{font-size:14px;color:rgba(255,255,255,0.58);line-height:1.65}
+.event-tag{
+  display:inline-block;margin-top:0.8rem;
+  font-size:10px;font-weight:700;letter-spacing:2px;
+  text-transform:uppercase;color:var(--lime);
+  border:1px solid rgba(181,229,80,0.3);
+  padding:3px 10px;border-radius:2px;
+  font-family:var(--font-display);
+}
+
+/* ============================================================
+   TEAM
+============================================================ */
+.team{background:var(--off-white)}
+.team-inner{max-width:1200px;margin:0 auto}
+.team-header{text-align:center;margin-bottom:3.5rem}
+.team-header .section-sub{margin:0 auto}
+.team-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.8rem}
+
+.member-card{
+  background:var(--white);border-radius:4px;overflow:hidden;
+  transition:transform 0.3s,box-shadow 0.3s;
+  border:1px solid rgba(26,122,60,0.1);
+  border-top:3px solid var(--green);
+}
+.member-card:hover{transform:translateY(-8px);box-shadow:0 20px 48px rgba(13,61,30,0.15)}
+
+/* --- Member avatar / photo area ---
+   Option A (current): initials placeholder styled block.
+   Option B (with photos): replace the .member-avatar div content with:
+     <img src="./images/team/member-name.jpg"
+          alt="Member Name"
+          class="member-photo" />
+   Then add CSS: .member-photo { width:100%; height:160px; object-fit:cover; object-position:top; }
+   And remove or hide .member-avatar's background/font styles. */
+.member-avatar{
+  height:160px;display:flex;align-items:center;justify-content:center;
+  font-family:var(--font-display);font-size:2.6rem;font-weight:800;
+  position:relative;overflow:hidden;
+}
+
+/* Dashed border hint when no photo — remove once real photos are used */
+.member-avatar-placeholder{
+  position:absolute;inset:8px;
+  border:1px dashed rgba(181,229,80,0.25);border-radius:2px;
+  pointer-events:none;
+}
+
+.member-info{padding:1.2rem}
+.member-name{
+  font-family:var(--font-display);font-weight:700;
+  font-size:1.05rem;color:var(--text);margin-bottom:4px;
+  text-transform:uppercase;letter-spacing:0.3px;
+}
+.member-role{font-size:13px;color:var(--muted)}
+.member-role span{color:var(--green);font-weight:600}
+
+/* ============================================================
+   CONTACT
+============================================================ */
+.contact{background:var(--white)}
+.contact-inner{
+  max-width:1100px;margin:0 auto;
+  display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start;
+}
+.contact-info h2{
+  font-family:var(--font-display);font-weight:800;
+  font-size:clamp(1.8rem,3vw,2.6rem);
+  margin-bottom:1rem;text-transform:uppercase;
+}
+.contact-info p{color:var(--muted);line-height:1.75;margin-bottom:2rem}
+.contact-detail{display:flex;align-items:flex-start;gap:14px;margin-bottom:1.5rem}
+.contact-icon{
+  width:44px;height:44px;border-radius:2px;
+  background:var(--green-dark);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.contact-icon svg{width:20px;height:20px;fill:var(--lime)}
+.contact-detail-text label{
+  display:block;font-size:10px;letter-spacing:2.5px;
+  text-transform:uppercase;color:var(--muted);margin-bottom:4px;
+  font-family:var(--font-display);font-weight:700;
+}
+.contact-detail-text a,.contact-detail-text p{
+  font-size:15px;color:var(--text);text-decoration:none;
+  font-weight:500;line-height:1.5;
+}
+.contact-detail-text a:hover{color:var(--green)}
+.contact-form{
+  background:var(--off-white);border-radius:4px;
+  padding:2.5rem;border:1px solid rgba(26,122,60,0.1);
+  border-top:3px solid var(--green);
+}
+.form-group{margin-bottom:1.2rem}
+.form-group label{
+  display:block;font-size:10px;font-weight:700;
+  letter-spacing:2px;text-transform:uppercase;
+  color:var(--muted);margin-bottom:6px;
+  font-family:var(--font-display);
+}
+.form-group input,.form-group textarea{
+  width:100%;background:var(--white);
+  border:1.5px solid rgba(26,122,60,0.15);
+  border-radius:2px;padding:12px 16px;
+  font-family:var(--font-body);font-size:15px;
+  color:var(--text);outline:none;transition:border-color 0.2s;
+}
+.form-group input:focus,.form-group textarea:focus{border-color:var(--green)}
+.form-group textarea{resize:vertical;min-height:120px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+
+/* ============================================================
+   FOOTER
+============================================================ */
+footer{background:var(--green-dark);padding:3rem 4vw 2rem}
+.footer-inner{max-width:1200px;margin:0 auto}
+.footer-top{
+  display:flex;justify-content:space-between;align-items:center;
+  padding-bottom:2rem;
+  border-bottom:1px solid rgba(255,255,255,0.07);
+  flex-wrap:wrap;gap:1.5rem;
+}
+.footer-logo{display:flex;flex-direction:column;gap:8px}
+
+/* Footer logo images — same pattern as nav.
+   Replace img src once assets are available. */
+.footer-logo-imgs{display:flex;align-items:center;gap:10px}
+.footer-logo-img{
+  height:30px;width:auto;
+  /* Placeholder styling — remove border/bg once real images are used */
+  background:rgba(181,229,80,0.08);
+  border:1px dashed rgba(181,229,80,0.25);
+  border-radius:2px;min-width:50px;
+  display:flex;align-items:center;justify-content:center;
+}
+.footer-logo-img img{height:28px;width:auto;display:block}
+.footer-logo-img .placeholder-label{
+  color:rgba(181,229,80,0.5);font-size:8px;font-weight:700;
+  letter-spacing:1.5px;padding:0 6px;
+  font-family:var(--font-display);
+}
+
+.footer-badge{
+  background:var(--lime);color:var(--green-dark);
+  font-family:var(--font-display);font-weight:800;
+  font-size:11px;letter-spacing:2px;
+  padding:4px 10px;border-radius:2px;
+  width:fit-content;text-transform:uppercase;
+}
+.footer-logo p{color:rgba(255,255,255,0.4);font-size:13px;margin-top:4px}
+
+.footer-links{display:flex;gap:2rem;flex-wrap:wrap}
+.footer-links a{
+  color:rgba(255,255,255,0.45);text-decoration:none;
+  font-size:12px;transition:color 0.2s;cursor:pointer;
+  text-transform:uppercase;letter-spacing:1px;
+  font-family:var(--font-display);font-weight:600;
+}
+.footer-links a:hover{color:var(--lime)}
+
+.footer-bottom{
+  padding-top:1.5rem;display:flex;
+  justify-content:space-between;align-items:center;
+  flex-wrap:wrap;gap:1rem;
+}
+.footer-bottom p{color:rgba(255,255,255,0.25);font-size:12px;letter-spacing:0.3px}
+.ieee-badge{display:flex;align-items:center;gap:8px;color:rgba(255,255,255,0.35);font-size:12px}
+.ieee-badge span{color:var(--lime);font-weight:700;font-family:var(--font-display)}
+
+/* Address bar in footer */
+.address-bar{
+  margin:0 -4vw;
+  background:rgba(181,229,80,0.06);
+  border-top:1px solid rgba(181,229,80,0.12);
+  padding:1rem 4vw;text-align:center;
+}
+.address-bar p{color:rgba(255,255,255,0.45);font-size:13px}
+.address-bar span{color:var(--lime);font-weight:500}
+
+/* ============================================================
+   FLOATING PARTICLES
+============================================================ */
+.particle{
+  position:absolute;pointer-events:none;
+  animation:float linear infinite;
+}
+@keyframes float{
+  0%{transform:translateY(0) rotate(0deg);opacity:0.5}
+  100%{transform:translateY(-100vh) rotate(720deg);opacity:0}
+}
+
+/* ============================================================
+   RESPONSIVE
+============================================================ */
+@media(max-width:768px){
+  .about-grid,.contact-inner{grid-template-columns:1fr}
+  .pillars{grid-template-columns:1fr}
+  .form-row{grid-template-columns:1fr}
+  .hero-stats .stat-divider{display:none}
+  .events-header{flex-direction:column;align-items:flex-start}
+  .logo-img-enig{display:none} /* hide second logo on very small screens if needed */
+}
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel">
+const { useState, useEffect, useRef } = React;
+
+const SECTIONS = ['Home','About','Events','Team','Contact'];
+
+/* ============================================================
+   TEAM DATA
+   — Add a `photo` field per member when images are available:
+     photo: './images/team/ghofrane-bouzidi.jpg'
+   The member card reads this field automatically (see JSX below).
+============================================================ */
+const TEAM = [
+  {name:'Ghofrane Bouzidi', role:'Chairwoman',      initials:'GB', color:'#0d3d1e', accent:'#b5e550' , photo : './assets/ghofrane.png'},
+  {name:'Donia Manaa',      role:'Vice Chairwoman', initials:'DM', color:'#1a7a3c', accent:'#b5e550' , photo : './assets/donia.png'},
+  {name:'Majd Lamouchi',    role:'Treasurer',        initials:'ML', color:'#2a9d54', accent:'#559d31' , photo : '../assets/majd.png'},
+  {name:'Moughith Rouis',   role:'Secretary',        initials:'MR', color:'#0d3d1e', accent:'#b5e550' , photo : '../assets/moughith.jpg   '},
+  {name:'Amrou Boukhcham', role:'Human Resources',  initials:'AB', color:'#1a7a3c', accent:'#559d31' , photo : './/assets/amrou.png'},
+];
+
+/* ============================================================
+   EVENTS DATA
+   — Add an `image` field per event when photos are available:
+     image: './images/events/power-electronics-workshop.jpg'
+   The event card reads this field automatically (see JSX below).
+============================================================ */
+const EVENTS = [
+  {
+    icon:'⚡',
+    date:'April 2026',
+    title:'The Role of Power Electronics in Revolutionizing Electric Charging Infrastructure',
+    desc:'A deep-dive workshop exploring the challenges and opportunities of power electronics in modern electric vehicle charging infrastructure.',
+    tag:'Workshop',
+    /* image: './images/events/power-electronics.jpg', */  /* TODO: uncomment & set path */
+  },
+  {
+    icon:'🌐',
+    date:'October 2025',
+    title:'IEEE Day Celebration',
+    desc:'Chapter-wide celebration of IEEE Day with alumni, faculty, and industry partners — networking, talks, and community spirit.',
+    tag:'Networking',
+    /* image: './images/events/ieee-day.jpg', */
+  },
+  {
+    icon:'📡',
+    date:'February 2026',
+    title:'IoT Bootcamp',
+    desc:'An intensive hands-on bootcamp covering Internet of Things fundamentals, sensor integration, and real-world IoT project deployment.',
+    tag:'Bootcamp',
+    /* image: './images/events/iot-bootcamp.jpg', */
+  },
+];
+
+/* ============================================================
+   COUNT-UP ANIMATION COMPONENT (unchanged logic)
+============================================================ */
+function CountUp({target, suffix='', duration=2000}) {
+  const [count, setCount] = useState(0);
+  const ref = useRef(null);
+  const started = useRef(false);
+  useEffect(() => {
+    const obs = new IntersectionObserver(([e]) => {
+      if (e.isIntersecting && !started.current) {
+        started.current = true;
+        let start = 0;
+        const step = target / (duration / 16);
+        const t = setInterval(() => {
+          start = Math.min(start + step, target);
+          setCount(Math.floor(start));
+          if (start >= target) clearInterval(t);
+        }, 16);
+      }
+    }, {threshold:0.5});
+    if (ref.current) obs.observe(ref.current);
+    return () => obs.disconnect();
+  }, [target, duration]);
+  return <span ref={ref}>{count}{suffix}</span>;
+}
+
+/* ============================================================
+   MAIN APP
+============================================================ */
+function App() {
+  const [scrolled, setScrolled] = useState(false);
+  const [active, setActive]     = useState('Home');
+  const [sent, setSent]         = useState(false);
+
+  useEffect(() => {
+    const h = () => setScrolled(window.scrollY > 40);
+    window.addEventListener('scroll', h);
+    return () => window.removeEventListener('scroll', h);
+  }, []);
+
+  const scrollTo = (id) => {
+    const el = document.getElementById(id.toLowerCase());
+    if (el) el.scrollIntoView({behavior:'smooth'});
+    setActive(id);
+  };
+
+  return (
+    <>
+      {/* ======================================================
+          NAV
+          — Two logo image slots:
+            1. IEEE IAS logo  → replace the placeholder div with:
+               <img src="./images/logo-ieee-ias.png" alt="IEEE IAS" />
+            2. ENIG logo      → replace with:
+               <img src="./images/logo-enig.png" alt="ENIG" />
+          Both wrappers keep their size constraints so swapping is
+          just changing the inner content.
+      ====================================================== */}
+      <nav className={scrolled ? 'scrolled' : 'top'}>
+        <div className="logo" style={{display:'flex',alignItems:'center',gap:'12px',textDecoration:'none'}}>
+
+          {/* --- IEEE IAS Logo ---
+              TODO: Replace this placeholder div with an <img> tag.
+              Example:
+                <div className="logo-img-ieee">
+                  <img src="./images/logo-ieee-ias.png" alt="IEEE IAS" />
+                </div>
+          */}
+          
+          <a href="https://enig.ieee.tn/" target="_blank" rel="noopener noreferrer" style={{display:'flex',alignItems:'center'}}>
+            <div className="logo-img-ieee">
+              <img src=".//assets/ias logo.png" alt="IEEE IAS" />
+            </div>
+          </a>
+          {/* --- ENIG / University Logo ---
+              TODO: Replace this placeholder div with an <img> tag.
+              Example:
+                <div className="logo-img-enig">
+                  <img src="./images/logo-enig.png" alt="ENIG" />
+                </div>
+          */}
+          <div className="logo-img-ieee" style={{height:'64px'}}>
+            <img src="./assets/ieee logo.png" alt="IEEE IAS" style={{height:'64px'}} />
+          </div>
+
+          <div className="logo-divider"/>
+
+          <span className="logo-text">IAS · ENIG Student Branch</span>
+        </div>
+
+        <ul className="nav-links">
+          {SECTIONS.map(s => (
+            <li key={s}>
+              <a
+                onClick={() => scrollTo(s)}
+                style={{color: active === s ? 'var(--lime)' : ''}}
+              >
+                {s}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+
+      {/* ======================================================
+          HERO
+      ====================================================== */}
+      <section className="hero" id="home">
+        <div className="hero-bg-circuit"/>
+        <div className="hero-glow"/>
+
+        {/* Floating particles — diamond shapes for industrial feel */}
+        {[...Array(14)].map((_,i) => (
+          <div key={i} className="particle" style={{
+            width:  `${5 + Math.random() * 5}px`,
+            height: `${5 + Math.random() * 5}px`,
+            background: i % 3 === 0 ? 'var(--lime)' : 'rgba(42,157,84,0.45)',
+            left:   `${Math.random() * 100}%`,
+            bottom: '-20px',
+            borderRadius: i % 2 === 0 ? '0' : '50%',
+            transform: 'rotate(45deg)',
+            animationDuration: `${9 + Math.random() * 14}s`,
+            animationDelay:    `${Math.random() * 8}s`,
+          }}/>
+        ))}
+
+        <div className="hero-content">
+          <div className="hero-eyebrow">
+            <span/>
+            Welcome to the Industry World
+          </div>
+          <h1>IEEE IAS<br/><em>ENIG</em> Chapter</h1>
+          <p className="hero-tagline">
+            Our IAS Chapter connects students with industry-focused knowledge,
+            bridging the gap between theory and practical applications.
+          </p>
+          <div className="hero-stats">
+            <div className="hero-stat">
+              <div className="stat-num"><CountUp target={10} suffix="+"/></div>
+              <div className="stat-label">Years of Excellence</div>
+            </div>
+            <div className="stat-divider"/>
+            <div className="hero-stat">
+              <div className="stat-num"><CountUp target={50} suffix="+"/></div>
+              <div className="stat-label">Active Members</div>
+            </div>
+          </div>
+          <div className="hero-cta">
+            <a className="btn-primary" onClick={() => scrollTo('Events')}>Explore Events</a>
+            <a className="btn-outline" onClick={() => scrollTo('Contact')}>Join Us</a>
+          </div>
+        </div>
+
+        <div className="hero-scroll" onClick={() => scrollTo('About')}>
+          <span>Scroll</span>
+          <div className="scroll-line"/>
+        </div>
+      </section>
+
+      {/* ======================================================
+          ABOUT
+      ====================================================== */}
+      <section className="about" id="about">
+        <div className="about-grid">
+          <div className="about-image-block">
+            <div className="about-card">
+              <div className="about-card-tag">Est. 2014 · ENIG Gabès</div>
+              <h3>Industry Applications Society</h3>
+              <p>
+                The IEEE Industry Applications Society focuses on the advancement
+                of theory and practice of electrical and electronic engineering in
+                the development, design, manufacture, and application of electrical systems.
+              </p>
+              <div className="about-features">
+                {[
+                  'Networking with industry professionals',
+                  'Hands-on workshops & labs',
+                  'Research and paper publication',
+                  'Leadership & soft skills development',
+                ].map(f => (
+                  <div className="about-feat" key={f}>
+                    <div className="feat-dot"/>
+                    {f}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <div className="about-text">
+            <div className="section-label">About Us</div>
+            <h2 className="section-title">Bridging Theory &amp; Real-World Practice</h2>
+            <p>
+              We are the IEEE Industry Applications Society Student Branch Chapter
+              at the National Engineering School of Gabès (ENIG). Since our founding,
+              we have been committed to empowering engineering students with the
+              knowledge, skills, and connections needed to thrive in industry.
+            </p>
+            <p>
+              Our chapter is a hub of innovation, collaboration, and professional
+              development — driven entirely by passionate student volunteers who
+              believe in the power of engineering to transform lives.
+            </p>
+            <div className="pillars">
+              {[
+                {t:'Education',  d:'Industry-relevant workshops and technical talks'},
+                {t:'Innovation', d:'Encouraging student research and creative solutions'},
+                {t:'Community',  d:'Building lasting bonds among engineers'},
+                {t:'Leadership', d:"Developing tomorrow's engineering leaders"},
+              ].map(p => (
+                <div className="pillar" key={p.t}>
+                  <h4>{p.t}</h4>
+                  <p>{p.d}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ======================================================
+          EVENTS
+          — Each event card has an image placeholder.
+            To add a real photo, add `image: './images/events/...'`
+            to the EVENTS array above. The card will render the
+            image automatically instead of the placeholder block.
+      ====================================================== */}
+      <section className="events" id="events">
+        <div className="events-inner">
+          <div className="events-header">
+            <div>
+              <div className="section-label">Activities</div>
+              <h2 className="section-title light">Events &amp; Activities</h2>
+              <p className="section-sub light">
+                From workshops to competitions, we create experiences that shape careers.
+              </p>
+            </div>
+          </div>
+
+          <div className="events-grid">
+            {EVENTS.map(ev => (
+              <div className="event-card" key={ev.title}>
+
+                {/* Event image — shows real photo if `ev.image` is set,
+                    otherwise shows a placeholder with the event icon */}
+                {ev.image ? (
+                  <img
+                    src={ev.image}
+                    alt={ev.title}
+                    style={{width:'100%',height:'160px',objectFit:'cover',display:'block'}}
+                  />
+                ) : (
+                  /* TODO: once you have event photos, add `image` to each
+                     entry in the EVENTS array above and this placeholder
+                     will automatically be replaced. */
+                  <div className="event-img-placeholder">
+                    {ev.icon}&nbsp;&nbsp;Add Event Photo
+                  </div>
+                )}
+
+                <div className="event-card-top">
+                  <div className="event-card-bg">{ev.icon}</div>
+                  <div className="event-date">{ev.date}</div>
+                  <div className="event-title">{ev.title}</div>
+                </div>
+
+                <div className="event-body">
+                  <p>{ev.desc}</p>
+                  <div className="event-tag">{ev.tag}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ======================================================
+          TEAM
+          — Each member card has an avatar placeholder.
+            To add a real photo, add `photo: './images/team/...'`
+            to the TEAM array above. The card will render the
+            photo automatically instead of the initials block.
+      ====================================================== */}
+      <section className="team" id="team">
+        <div className="team-inner">
+          <div className="team-header">
+            <div className="section-label">The People</div>
+            <h2 className="section-title">Meet Our Team</h2>
+            <p className="section-sub">
+              Passionate engineers and leaders driving our chapter forward.
+            </p>
+          </div>
+
+          <div className="team-grid">
+            {TEAM.map(m => (
+              <div className="member-card" key={m.name} style={{borderTop:`3px solid ${m.accent}`}}>
+
+                {/* Member photo — shows real photo if `m.photo` is set,
+                    otherwise shows coloured initials block */}
+                {m.photo ? (
+                  <>
+                    <div style={{height:'6px',background:m.accent}} />
+                    <img
+                      src={m.photo}
+                      alt={m.name}
+                      style={{width:'100%',height:'154px',objectFit:'cover',objectPosition:'top',display:'block'}}
+                    />
+                  </>
+                ) : (
+                  /* TODO: once you have team photos, add `photo` to each
+                     entry in the TEAM array above. */
+                  <div className="member-avatar" style={{background:m.color}}>
+                    <div className="member-avatar-placeholder"/>
+                    <span style={{color:m.accent,position:'relative',zIndex:1}}>{m.initials}</span>
+                  </div>
+                )}
+
+                <div className="member-info">
+                  <div className="member-name">{m.name}</div>
+                  <div className="member-role"><span style={{color:m.accent}}>{m.role}</span></div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ======================================================
+          CONTACT
+      ====================================================== */}
+      <section className="contact" id="contact">
+        <div className="contact-inner">
+          <div className="contact-info">
+            <div className="section-label">Get in Touch</div>
+            <h2 className="section-title">Contact Us</h2>
+            <p>
+              We'd love to hear from you — whether you're a student wanting to join,
+              a professional looking to collaborate, or just curious about what we do.
+            </p>
+
+            <div className="contact-detail">
+              <div className="contact-icon">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M20 4H4C2.9 4 2 4.9 2 6v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                </svg>
+              </div>
+              <div className="contact-detail-text">
+                <label>Email</label>
+                <a href="mailto:ieee.iaschapter.enig.sb@gmail.com">ieee.iaschapter.enig.sb@gmail.com</a>
+              </div>
+            </div>
+
+            <div className="contact-detail">
+              <div className="contact-icon">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z"/>
+                </svg>
+              </div>
+              <div className="contact-detail-text">
+                <label>Address</label>
+                <p>Avenue Omar Ibn El Khattab, Zrig Gabes<br/>6029 Gabès, Tunisia</p>
+              </div>
+            </div>
+
+            <div className="contact-detail">
+              <div className="contact-icon">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+                </svg>
+              </div>
+              <div className="contact-detail-text">
+                <label>Chapter</label>
+                <p>IEEE IAS ENIG Student Branch Chapter<br/>National School of Engineering of Gabès</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="contact-form">
+            {sent ? (
+              <div style={{textAlign:'center',padding:'3rem 0'}}>
+                <div style={{fontSize:'3rem',marginBottom:'1rem'}}>✅</div>
+                <h3 style={{fontFamily:'var(--font-display)',fontWeight:800,color:'var(--green-dark)',marginBottom:'0.5rem',textTransform:'uppercase',letterSpacing:'0.5px'}}>
+                  Message Sent!
+                </h3>
+                <p style={{color:'var(--muted)'}}>We'll get back to you soon. Thank you for reaching out!</p>
+                <button
+                  className="btn-primary"
+                  style={{marginTop:'1.5rem'}}
+                  onClick={() => setSent(false)}
+                >
+                  Send Another
+                </button>
+              </div>
+            ) : (
+              <>
+                <h3 style={{fontFamily:'var(--font-display)',fontWeight:800,fontSize:'1.4rem',marginBottom:'1.5rem',color:'var(--text)',textTransform:'uppercase',letterSpacing:'0.5px'}}>
+                  Send us a message
+                </h3>
+                <div className="form-row">
+                  <div className="form-group">
+                    <label>First Name</label>
+                    <input type="text" placeholder="Ahmed"/>
+                  </div>
+                  <div className="form-group">
+                    <label>Last Name</label>
+                    <input type="text" placeholder="Trabelsi"/>
+                  </div>
+                </div>
+                <div className="form-group">
+                  <label>Email</label>
+                  <input type="email" placeholder="ahmed@example.com"/>
+                </div>
+                <div className="form-group">
+                  <label>Subject</label>
+                  <input type="text" placeholder="I'd like to join the chapter"/>
+                </div>
+                <div className="form-group">
+                  <label>Message</label>
+                  <textarea placeholder="Tell us about yourself or your inquiry..."/>
+                </div>
+                <button
+                  className="btn-primary"
+                  style={{width:'100%',fontSize:'16px',padding:'15px',letterSpacing:'2px'}}
+                  onClick={() => setSent(true)}
+                >
+                  Send Message →
+                </button>
+              </>
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* ======================================================
+          FOOTER
+          — Same two logo slots as the nav.
+            Replace placeholder divs with <img> tags when ready.
+      ====================================================== */}
+      <footer>
+        <div className="footer-inner">
+          <div className="footer-top">
+            <div className="footer-logo">
+              {/* Footer logos — mirror the nav logos */}
+              <div className="footer-logo-imgs">
+
+                {/* TODO: <img src="./images/logo-ieee-ias.png" alt="IEEE IAS" /> */}
+                <div className="footer-logo-img">
+                  <span className="placeholder-label">IEEE IAS</span>
+                </div>
+
+                {/* TODO: <img src="./images/logo-enig.png" alt="ENIG" /> */}
+                <div className="footer-logo-img">
+                  <span className="placeholder-label">ENIG</span>
+                </div>
+
+                <div className="footer-badge">IEEE IAS · ENIG SBC</div>
+              </div>
+              <p style={{color:'rgba(255,255,255,0.4)',fontSize:'13px',marginTop:'4px'}}>
+                National School of Engineering of Gabès
+              </p>
+            </div>
+
+            <div className="footer-links">
+              {SECTIONS.map(s => (
+                <a key={s} onClick={() => scrollTo(s)}>{s}</a>
+              ))}
+            </div>
+          </div>
+
+          <div className="address-bar" style={{margin:'0 -4vw',padding:'1rem 4vw',textAlign:'center'}}>
+            <p style={{color:'rgba(255,255,255,0.45)',fontSize:'13px'}}>
+              📍{' '}
+              <span style={{color:'var(--lime)',fontWeight:500}}>
+                Avenue Omar Ibn El Khattab, Zrig Gabes — 6029 Gabès, Tunisia
+              </span>
+              &nbsp;·&nbsp;
+              ✉️{' '}
+              <a
+                href="mailto:ieee.iaschapter.enig.sb@gmail.com"
+                style={{color:'var(--lime)',textDecoration:'none',fontWeight:500}}
+              >
+                ieee.iaschapter.enig.sb@gmail.com
+              </a>
+            </p>
+          </div>
+
+          <div className="footer-bottom">
+            <p>© 2025 IEEE IAS ENIG Student Branch Chapter. All rights reserved.</p>
+            <div className="ieee-badge">
+              <span>IEEE</span> Industry Applications Society
+            </div>
+          </div>
+        </div>
+      </footer>
+    </>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body>
+</html>
